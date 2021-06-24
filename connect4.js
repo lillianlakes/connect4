@@ -50,20 +50,19 @@ function makeHtmlBoard() {
   // uses HEIGHT to create table rows
   // uses WIDTH to create table cells for each row
   for (let y = 0; y < HEIGHT; y++) {
-    // TODO: Create a table row element and assign to a "row" variable
+    // Creates a table row element and assigns to a "row" variable
     const row = document.createElement("tr");
-    // row.setAttribute("id", y);
 
     for (let x = 0; x < WIDTH; x++) {
-      // TODO: Create a table cell element and assign to a "cell" variable
+      // Creates a table cell element and assign to a "cell" variable
       let rowCell = document.createElement("td");
-      // TODO: add an id, y-x, to the above table cell element
+      // adds an id, y-x, to the above table cell element
       // you'll use this later, so make sure you use y-x
       rowCell.setAttribute("id", `${y}-${x}`);
-      // TODO: append the table cell to the table row
+      // appends the table cell to the table row
       row.append(rowCell);
     }
-    // TODO: append the row to the html board
+    // appends the row to the html board
     htmlBoard.append(row);
 
   }
@@ -81,7 +80,6 @@ function findSpotForCol(x) {
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
-  // debugger;
   // Makes a div and inserts into correct table cell
   const div = document.createElement("div");
   div.classList.add(`piece`, `p${currPlayer}`);
@@ -93,7 +91,7 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -121,9 +119,10 @@ function handleClick(evt) {
 
   // check for tie
   // checks if all cells in board are filled; if so call, call endGame
-  if (board.every(cell => cell !== null)) {
-    endGame();
+  if (board.every(row => row.every(cell => cell !== null))) {
+    endGame(`It's a tie!`);
   };
+
 
   // switch players
   // switches currPlayer 1 <-> 2
@@ -141,25 +140,37 @@ function checkForWin() {
    */
   function _win(cells) {
 
-    // TODO: Check four cells to see if they're all legal & all color of current
+    // Checks four cells to see if they're all legal & all color of current
     // player
 
+    let arr = [];
+
+    for (let i = 0; i < cells.length; i++) {
+      let y = cells[i][0];
+      let x = cells[i][1];
+
+      if (board[y] === undefined) {
+        return false;
+      }
+
+      arr.push(board[y][x]);
+    };
+
+    return arr.every(cell => cell === currPlayer);
   }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
   // for 4 cells (starting here) for each of the different
   // ways to win: horizontal, vertical, diagonalDR, diagonalDL
-  for (var y = 0; y < HEIGHT; y++) {
-    for (var x = 0; x < WIDTH; x++) {
-      // TODO: assign values to the below variables for each of the ways to win
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
+      // assigns values to the below variables for each of the ways to win
       // horizontal has been assigned for you
-      // each should be an array of 4 cell coordinates:
-      // [ [y, x], [y, x], [y, x], [y, x] ]
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert;
-      let diagDL;
-      let diagDR;
+      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
 
       // find winner (only checking each win-possibility as needed)
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
