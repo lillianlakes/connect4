@@ -1,5 +1,14 @@
 /* game board table */
 
+#game {
+  text-align: center;
+}
+
+table {
+  display: inline-block;
+  position: relative;
+}
+
 #board td {
   width: 50px;
   height: 50px;
@@ -8,14 +17,22 @@
 
 /* pieces are div within game table cells: draw as colored circles */
 
-.piece {
-  /* TODO: make into circles */
-  margin: 5px;
-  width: 80%;
-  height: 80%;
-  border-radius: 50%;
+@keyframes slowDrop {
+  from { top: 7%; }
+  to { top: 20%; }
 }
 
+.piece {
+  /* Made into circles and added animation */
+  position: absolute;
+  width: 13%;
+  height: 13%;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  animation: slowDrop 0.5s;
+}
+
+/* Made pieces red/blue,  depending on player 1/2 piece */
 .p1 {
   background-color: red;
 }
@@ -23,8 +40,6 @@
 .p2 {
   background-color: blue;
 }
-
-/* TODO: make pieces red/blue,  depending on player 1/2 piece */
 
 /* column-top is table row of clickable areas for each column */
 
@@ -35,3 +50,62 @@
 #column-top td:hover {
   background-color: gold;
 }
+
+* {
+  font-family: 'Audiowide', cursive;
+}
+
+h1 {
+  text-align: center;
+  color: blue;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
+}
+
+.restart {
+  text-align: center;
+}
+
+button {
+  display: inline-block;
+  position: relative;
+  margin: 1%;
+  color: blue;
+}
+
+.fa {
+  color: red;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+#dialogoverlay{
+	display: none;
+	opacity: .8;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background: #FFF;
+	width: 100%;
+	z-index: 10;
+}
+#dialogbox{
+	display: none;
+	position: fixed;
+	background: black;
+	border-radius:7px; 
+	width: 50%;
+	z-index: 10;
+}
+#dialogbox > div{ background:#FFF; margin:5px; }
+#dialogbox > div > #dialogboxhead{ background: #FFF; font-size:19px; padding:20px; color: black; text-align:center;}
+#dialogbox > div > #dialogboxbody{ background: black; padding:20px; color:#FFF; text-align:center; }
+#dialogbox > div > #dialogboxfoot{ background: #FFF; padding:10px; text-align:center; }

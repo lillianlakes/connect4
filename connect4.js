@@ -13,14 +13,18 @@ const HEIGHT = 6;
 let currPlayer = 1; // active player: 1 or 2
 const board = []; // array of rows, each row is array of cells  (board[y][x])
 
+const restart = document.querySelector('#restart');
+
+const playAgain = new CustomConfirm();
+
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
-  for (let i = 0; i < HEIGHT; i++) {
+  for (let y = 0; y < HEIGHT; y++) {
     let row = [];
-    for (let j = 0; j < WIDTH; j++) {
+    for (let x = 0; x < WIDTH; x++) {
       row.push(null);
     }
     board.push(row);
@@ -91,7 +95,11 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  alert(msg);
+
+  setTimeout(function () {
+    return playAgain.render(msg);
+  }, 100);
+
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -119,12 +127,11 @@ function handleClick(evt) {
 
   // check for tie
   // checks if all cells in board are filled; if so call, call endGame
-  if (board.every(row => row.every(cell => cell !== null))) {
+  // if (board.every(row => row.every(cell => cell !== null))) { // original
+  if (board[0].every(topCell => topCell !== null)) { // more efficient
     endGame(`It's a tie!`);
   };
 
-
-  // switch players
   // switches currPlayer 1 <-> 2
   currPlayer = currPlayer === 1 ? 2 : 1;
 }
@@ -143,6 +150,7 @@ function checkForWin() {
     // Checks four cells to see if they're all legal & all color of current
     // player
 
+  /* // our previous solution
     let arr = [];
 
     for (let i = 0; i < cells.length; i++) {
@@ -157,7 +165,15 @@ function checkForWin() {
     };
 
     return arr.every(cell => cell === currPlayer);
-  }
+  
+  */
+
+  // more optimal
+  return cells.every(
+    ([y, x]) =>
+      board[y] !== undefined && board[y][x] === currPlayer
+  );
+}
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
   // for 4 cells (starting here) for each of the different
@@ -177,6 +193,37 @@ function checkForWin() {
         return true;
       }
     }
+  }
+}
+
+restart.addEventListener('click', function() {
+  location.reload();
+});
+
+function CustomConfirm(msg) {
+  this.render = function (msg) {
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    const dialogoverlay = document.querySelector('#dialogoverlay');
+    const dialogbox = document.querySelector('#dialogbox');
+    dialogoverlay.style.display = "block";
+    dialogoverlay.style.height = winH + "px";
+    dialogbox.style.left = (winW / 4) + "px";
+    dialogbox.style.top = (winH / 5) + "px";
+    dialogbox.style.display = "block";
+
+    document.querySelector('#dialogboxhead').innerHTML = `<h1>${msg}</h1><h3>Thanks for playing <span class=blue>Connect </span><span class=red>4</span></h3>`;
+    document.querySelector('#dialogboxbody').innerHTML = 'Would you like to play again?';
+    document.querySelector('#dialogboxfoot').innerHTML = '<button onclick="playAgain.yes()">Yes</button> <button onclick="playAgain.no()">No</button>';
+  }
+  this.no = function () {
+    document.querySelector('#dialogbox').style.display = "none";
+    document.querySelector('#dialogoverlay').style.display = "none";
+  }
+  this.yes = function () {
+    location.reload();
+    document.querySelector('#dialogbox').style.display = "none";
+    document.querySelector('#dialogoverlay').style.display = "none";
   }
 }
 
