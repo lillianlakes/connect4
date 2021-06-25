@@ -10,8 +10,8 @@ table {
 }
 
 #board td {
-  width: 50px;
-  height: 50px;
+  width: 6vw;
+  height: 6vw;
   border: solid 1px #666;
 }
 
@@ -109,3 +109,35 @@ button:hover {
 #dialogbox > div > #dialogboxhead{ background: #FFF; font-size:19px; padding:20px; color: black; text-align:center;}
 #dialogbox > div > #dialogboxbody{ background: black; padding:20px; color:#FFF; text-align:center; }
 #dialogbox > div > #dialogboxfoot{ background: #FFF; padding:10px; text-align:center; }
+
+/*MEDIA*/
+@media (max-width: 500px) {
+
+  #board td {
+  width: 14vw;
+  height: 14vw;
+  }
+}
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 812px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+  * {
+    font-size: 45px;
+  }
+  
+  h1 {
+    font-size: 60px;
+  }
+
+  button {
+    font-size: 30px;
+  }
+
+  #board td {
+  width: 12vw;
+  height: 12vw;
+  }
+}
